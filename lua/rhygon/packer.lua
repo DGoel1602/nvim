@@ -34,4 +34,5 @@ return require('packer').startup(function(use)
 	use("mason-org/mason.nvim")
 	use("mason-org/mason-lspconfig.nvim")
 	use('ThePrimeagen/vim-be-good')
+	use 'm4xshen/autoclose.nvim'
 end)
