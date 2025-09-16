@@ -1,5 +1,3 @@
--- Reserve a space in the gutter
--- This will avoid an annoying layout shift in the screen
 vim.opt.signcolumn = 'yes'
 
 -- Add cmp_nvim_lsp capabilities settings to lspconfig
@@ -53,28 +51,35 @@ require('mason-lspconfig').setup({
 local cmp = require('cmp')
 
 cmp.setup({
-  sources = {
-    {name = 'nvim_lsp'},
-  },
-  snippet = {
-    expand = function(args)
-      vim.snippet.expand(args.body)
+	sources = cmp.config.sources({
+		{ name = 'nvim_lsp' },
+		--		{ name = 'vsnip' }, -- For vsnip users.
+		{ name = 'luasnip' }, -- For luasnip users.
+		-- { name = 'ultisnips' }, -- For ultisnips users.
+		-- { name = 'snippy' }, -- For snippy users.
+	}, {
+		{ name = 'buffer' },
+	}),
+	snippet = {
+		expand = function(args)
+			vim.snippet.expand(args.body)
 		end,
 	},
 	mapping = cmp.mapping.preset.insert({
 		['<CR>'] = cmp.mapping.confirm({
 			select = true
 		}),
+		['<C-Space>'] = cmp.mapping.complete(),
 		['<Tab>'] = cmp.mapping(function(fallback)
-      local col = vim.fn.col('.') - 1
+			local col = vim.fn.col('.') - 1
 
-      if cmp.visible() then
-        cmp.select_next_item({behavior = 'select'})
-      elseif col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-        fallback()
-      else
-        cmp.complete()
-      end
-    end, {'i', 's'}),
+			if cmp.visible() then
+				cmp.select_next_item({behavior = 'select'})
+			elseif col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+				fallback()
+			else
+				cmp.complete()
+			end
+		end, {'i', 's'}),
 	}),
 })
